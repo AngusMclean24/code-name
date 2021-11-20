@@ -14,6 +14,6 @@ const socket = new WebSocket(serverAddress);
 // }
 
 function colourChange(item){
-    socket.emit('message', item)
+    socket.send(item)
 
 }
