@@ -15,7 +15,7 @@ socket.onmessage = ({ data }) => {
 
 socket.on('open', function() {
     socket.send("Hello server!")
-}
+})
 
 function colourChange(item){
     socket.send(item)
