@@ -1,5 +1,6 @@
 
-const socket = io('ws://localhost:8080');
+const serverAddress = 'wss://simple-websocket-codename.glitch.me/';
+const socket = io('serverAddress');
 
 socket.on('message', text => {
     /*
