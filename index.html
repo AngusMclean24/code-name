@@ -1,3 +1,43 @@
-<h1>Custom domain mapping</h1>
-<h2>Hello</h2>
-<h2>Hllo</h2>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.socket.io/socket.io-3.0.0.js"></script>
+    <script defer src="app.js"></script>
+
+    <style>
+        .grid-container {
+          display: inline-grid;
+          grid-template-columns: auto auto auto;
+          background-color:  rgba(255, 255, 255, 0.8);
+          padding: 10px;
+          align-items: center;
+        }
+        
+        .grid-item {
+          background-color: rgba(95, 91, 91, 0.8);
+          border: 5px solid rgba(255, 255, 255, 1);
+          padding: 100px;
+          font-size: 30px;
+          text-align: center;
+          border-radius: 15px;
+        }
+        </style>
+</head>
+<body>
+    <div class="grid-container">
+        <div class="grid-item" id="1" onclick="colourChange(1)">1</div>
+        <div class="grid-item" id="2"onclick="colourChange(2)">2</div>
+        <div class="grid-item" id="3"onclick="colourChange(3)">3</div>
+        <div class="grid-item" id="4"onclick="colourChange(4)">4</div>
+        <div class="grid-item" id="5"onclick="colourChange(5)">5</div>
+        <div class="grid-item" id="6"onclick="colourChange(6)">6</div>
+        <div class="grid-item" id="7"onclick="colourChange(7)">7</div>
+        <div class="grid-item" id="8"onclick="colourChange(8)">8</div>
+        <div class="grid-item" id="9"onclick="colourChange(9)">9</div>
+      </div> 
+</body>
+</html>
