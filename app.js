@@ -12,3 +12,8 @@ const socket = new WebSocket(serverAddress);
 // document.querySelector('button').onclick = () => {
 //     socket.send('hello');
 // }
+
+function colourChange(item){
+    socket.emit('message', item)
+
+}
