@@ -1,9 +1,6 @@
 
-const serverAddress = 'wss://simple-websocket-codename.glitch.me/';
-const socket = io('serverAddress', {
-    headers: {
-        "user-agent": "Chrome"
-    });
+const serverAddress = 'https://simple-websocket-codename.glitch.me/';
+const socket = io('serverAddress')
 
 socket.on('message', text => {
     /*
