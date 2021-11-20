@@ -10,7 +10,9 @@ socket.onmessage = ({ data }) => {
      console.log('Message from server ', grid);
      
      for (i=0; i<grid.length; i++){
+          console.log(i)
         if (grid[i] == 0) {
+             
             document.getElementById(i+1).style.backgroundColor = "rgba(95, 91, 91, 0.8)";
             //document.getElementById(i+1).textContent = 20
 
