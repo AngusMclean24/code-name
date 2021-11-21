@@ -16,28 +16,115 @@
           padding: 10px;
           align-items: center;
         }
+
+        .teamcontainer{
+          width: 100vw;
+          height: 10vh;
+          align-self: center;
+          position:relative;/* Width of the outside container */
+          flex-direction: row;
+          display:flex;
+        }
         
         .grid-item {
           background-color: rgba(95, 91, 91, 0.8);
           border: 5px solid rgba(255, 255, 255, 1);
-          padding: 100px;
+          padding: 10vw;
           font-size: 30px;
           text-align: center;
           border-radius: 15px;
         }
+
+        #gameScreen {
+          display: none;
+        }
+
+        .teams {
+          width: 100vw;
+          display: flex;
+          flex-direction: column;
+          padding: 5px
+        }
+
+        #red {
+          color: rgba(192, 67, 67, 0.8)
+        }
+
+        #blue {
+          color: rgba(108, 200, 253, 0.8)
+        }
+
         </style>
+
+        
 </head>
 <body>
-    <div class="grid-container">
-        <div class="grid-item" id="1" onclick="colourChange(1)">1</div>
-        <div class="grid-item" id="2"onclick="colourChange(2)">2</div>
-        <div class="grid-item" id="3"onclick="colourChange(3)">3</div>
-        <div class="grid-item" id="4"onclick="colourChange(4)">4</div>
-        <div class="grid-item" id="5"onclick="colourChange(5)">5</div>
-        <div class="grid-item" id="6"onclick="colourChange(6)">6</div>
-        <div class="grid-item" id="7"onclick="colourChange(7)">7</div>
-        <div class="grid-item" id="8"onclick="colourChange(8)">8</div>
-        <div class="grid-item" id="9"onclick="colourChange(9)">9</div>
-      </div> 
+      <section class="vh-100">
+        <div class="container h-100">
+    
+          <div id="initialScreen" class="h-100">
+            <div class="d-flex flex-column align-items-center justify-content-center h-100">
+                <h1>Multiplayer Snake</h1>
+                
+                <div class="form-group">
+                  <input type="text" placeholder="Enter Username" id="usernameInput"/>
+                </div>
+                <button
+                  type="submit"
+                  class="btn btn-success"
+                  id="joinGameButton"
+                >
+                  Join Game
+                </button>
+            </div>
+          </div>
+    
+          <div id="gameScreen" class="h-100">
+            <div class = "teamcontainer">
+            <div class= "teams" id = "red">
+              <h2>Red Team</h2>
+              <ul class = "list">
+        
+              </ul>
+              <button type="submit" class="btn btn-success" id="joinRedButton"onclick="teamChange(1)">
+                  Join
+              </button>
+            </div>
+            
+            <div class= "teams" id = "spectator">
+              <h2>Spectators</h2>
+              <ul class = "list">
+        
+              </ul>
+              <button type="submit" class="btn btn-success" id="joinSpectatorButton"onclick="teamChange(0)">
+                Join
+              </button>
+            </div>
+
+            <div class= "teams" id = "blue">
+              <h2>Blue Team</h2>
+              <ul class = "list">
+        
+              </ul>
+              <button type="submit" class="btn btn-success" id="joinBlueButton" onclick="teamChange(2)">
+                Join
+              </button>
+            </div>
+            </div>
+
+            <div class="grid-container">
+              <div class="grid-item" id="1" onclick="colourChange(1)">1</div>
+              <div class="grid-item" id="2"onclick="colourChange(2)">2</div>
+              <div class="grid-item" id="3"onclick="colourChange(3)">3</div>
+              <div class="grid-item" id="4"onclick="colourChange(4)">4</div>
+              <div class="grid-item" id="5"onclick="colourChange(5)">5</div>
+              <div class="grid-item" id="6"onclick="colourChange(6)">6</div>
+              <div class="grid-item" id="7"onclick="colourChange(7)">7</div>
+              <div class="grid-item" id="8"onclick="colourChange(8)">8</div>
+              <div class="grid-item" id="9"onclick="colourChange(9)">9</div>
+            </div>       
+          </div>
+        </div>
+      </section>
 </body>
 </html>
