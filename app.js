@@ -1,96 +1,51 @@
+const URL = "wss://simple-websocket-codename.glitch.me/";
+const socket = io(URL);
 
-const socket = io('wss://simple-websocket-codename.glitch.me/');
-
-const gameScreen = document.getElementById('gameScreen');
-const initialScreen = document.getElementById('initialScreen');
 const joinGameBtn = document.getElementById('joinGameButton');
-const usernameInput = document.getElementById('usernameInput');
+const newGameBtn = document.getElementById('newGameButton');
 
 joinGameBtn.addEventListener('click', submitUsername);
+newGameBtn.addEventListener('click', restartGame);
 
+//initialise board
 socket.emit('getGrid') 
 var grid = null
+var team = null
+var turn = null
+
+//server listening functions
+socket.on('username', joinGame);
+
 socket.on('returnGrid', (text) => {
     grid = text
-    handleGameState()
+    displayBoard()
 })
 
-var team = null
 socket.on('returnTeam', (text) => {
     team = text
 })
 
+socket.on('returnTurn', (text) => {
+    turn = text
+    console.log ("recieved returnTurn " + turn)
+})
 
-socket.on('changeGameState', handleGameState);
-socket.on('username', joinGame);
-socket.on('changeUsers', displayUsers)
+socket.on('gameWinner', (text) => {
+    const header = document.querySelector('h3')
 
-function colourChange(item){
-    console.log(team)
-    socket.emit('clickedGrid', item, changeGrid(item))
-    handleGameState()
-}
-
-function teamChange(item){
-    team = item
-    socket.emit('teamChange', team)
-}
-
-function handleGameState () {
-    for (i=0; i<grid.length; i++){
-        if (grid[i] == 0) { 
-            document.getElementById(i+1).style.backgroundColor = "rgba(95, 91, 91, 0.8)";
-        }
-        
-        else if (grid[i] == 1){
-            document.getElementById(i+1).style.backgroundColor = "rgba(192, 67, 67, 0.8)";
-        }
-
-        else {
-            document.getElementById(i+1).style.backgroundColor = "rgba(108, 200, 253, 0.8)";
-        }
-    } 
-}
-
-function submitUsername () {
-    console.log(usernameInput.value)
-    socket.emit('username', usernameInput.value)
-
-    /*
-    initialScreen.style.display = "none";
-    gameScreen.style.display = "block";
-    */
-}
-
-function displayUsers (users){
-    document.querySelector('ul')
-    
-    const red = document.querySelector('#red .list')
-    const blue = document.querySelector('#blue .list')
-    const spectator = document.querySelector('#spectator .list')
-
-    removeAllChildNodes(red)
-    removeAllChildNodes(blue)
-    removeAllChildNodes(spectator)
-
-    for (let i = 0; i<users.length; i++){
-        const el = document.createElement('li');
-        el.innerHTML = users[i][1]
-
-        if (users[i][2] == 0) {
-            spectator.appendChild(el)
-        }
-
-        else if (users[i][2] == 1) {
-            red.appendChild(el)
-        }
-
-        else {
-            blue.appendChild(el)
-        }
-        
+    if (text == 1) {
+        header.innerText = 'Congratulations to red team you won!'
+    } else {
+        header.innerText = 'Congratulations to blue team you won!'
     }
+    
+    winScreen.style.display = "block";
 
+})
+
+//user functions
+function submitUsername () {
+    socket.emit('username', usernameInput.value)
 }
 
 function joinGame (state) {
@@ -101,30 +56,45 @@ function joinGame (state) {
     } 
 
     else {
-
+        const el = document.createElement('p1')
+        el.innerText = 'username already exists'
+        el.style.color = 'red'
+        const screen = document.querySelector('#initialScreen')
+        screen.appendChild(el)
     }
 }
 
-function removeAllChildNodes(parent) {
-    while (parent.firstChild) {
-        parent.removeChild(parent.firstChild);
-    }
-}
-
-
-function changeGrid(index) {
+//game play functions
+function squareChange(row, column){
     if (team != 0) {
-        if (grid[index-1] == team){
-            grid[index-1] = 0
-            return 0
+        if (turn == team) {
+            grid[row][column] = team
+            socket.emit('clickedGrid', row, column, team)
+            displayBoard()
         }
+        
+    }
+}
 
-        else {
-            grid[index-1] = team
-            return team
+function displayBoard () {
+    for (let y=0; y<grid.length; y++){
+        for(let x=0; x<grid[y].length; x++) {
+            if (grid[y][x] == 0) { 
+                document.getElementById(y+","+x).style.backgroundColor = "rgba(95, 91, 91, 0.8)";
+            }
+            
+            else if (grid[y][x] == 1){
+                document.getElementById(y+","+x).style.backgroundColor = "rgba(192, 67, 67, 0.8)";
+            }
+
+            else {
+                document.getElementById(y+","+x).style.backgroundColor = "rgba(108, 200, 253, 0.8)";
+            }
         }
     } 
-    else {
-        return grid[index-1]
-    }
+}
+
+function restartGame() {
+    socket.emit('restart')
+    winScreen.style.display = "none";
 }
