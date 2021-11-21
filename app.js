@@ -123,5 +123,8 @@ function changeGrid(index) {
             grid[index-1] = team
             return team
         }
-    }  
+    } 
+    else {
+        return grid[index-1]
+    }
 }
