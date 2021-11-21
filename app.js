@@ -8,6 +8,17 @@ const usernameInput = document.getElementById('usernameInput');
 
 joinGameBtn.addEventListener('click', submitUsername);
 
+socket.emit('getGrid') 
+var grid = null
+socket.on('returnGrid', (text) => {
+    grid = text
+    handleGameState()
+})
+
+var team = null
+socket.on('returnTeam', (text) => {
+    team = text
+})
 
 
 socket.on('changeGameState', handleGameState);
@@ -15,14 +26,17 @@ socket.on('username', joinGame);
 socket.on('changeUsers', displayUsers)
 
 function colourChange(item){
-    socket.emit('clickedGrid', item)
+    console.log(team)
+    socket.emit('clickedGrid', item, changeGrid(item))
+    handleGameState()
 }
 
-function teamChange(team){
+function teamChange(item){
+    team = item
     socket.emit('teamChange', team)
 }
 
-function handleGameState (grid) {
+function handleGameState () {
     for (i=0; i<grid.length; i++){
         if (grid[i] == 0) { 
             document.getElementById(i+1).style.backgroundColor = "rgba(95, 91, 91, 0.8)";
@@ -83,6 +97,7 @@ function joinGame (state) {
     if (state == 1) {
         initialScreen.style.display = "none";
         gameScreen.style.display = "block"; 
+        socket.emit('getTeam') 
     } 
 
     else {
@@ -94,4 +109,19 @@ function removeAllChildNodes(parent) {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
     }
+}
+
+
+function changeGrid(index) {
+    if (team != 0) {
+        if (grid[index-1] == team){
+            grid[index-1] = 0
+            return 0
+        }
+
+        else {
+            grid[index-1] = team
+            return team
+        }
+    }  
 }
