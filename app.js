@@ -1,3 +1,6 @@
+const URL = "wss://simple-websocket-codename.glitch.me/";
+const socket = io(URL);
+
 class GameView {
     constructor(root) {
         this.root = root
@@ -88,7 +91,11 @@ class UserView {
 
         for (const user of users) {
             const el = document.createElement('li');
-            el.innerHTML = user[1]
+            var name = user[1]
+            if (name == username) {
+                name = name + "(you)"
+            }
+            el.innerHTML = name
 
             if (user[2] == "Red") {
                 red.appendChild(el)
@@ -116,9 +123,6 @@ class Game {
 
 }
 
-const URL = "wss://simple-websocket-codename.glitch.me/";
-const socket = io(URL);
-
 let game = new Game();
 let gameView = new GameView(document.getElementById("app"));
 let userView = new UserView(document.getElementById("app"));
@@ -132,6 +136,7 @@ joinGameBtn.addEventListener('click', submitUsername);
 
 
 var team = null
+var username = null
 
 // define functions
 gameView.onTileClick = function (i) {
@@ -162,6 +167,7 @@ gameView.onRestartClick = function () {
 
 function submitUsername () {
     socket.emit('username', usernameInput.value)
+    username = usernameInput.value
 }
 
 function joinGame (state) {
@@ -178,6 +184,7 @@ function joinGame (state) {
         el.style.color = 'red'
         const screen = document.querySelector('.menu')
         screen.appendChild(el)
+        username = null
     }
 }
 
@@ -208,4 +215,4 @@ function removeAllChildNodes(parent) {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
     }
-}  
+}
