@@ -29,7 +29,7 @@ class GameView {
     }
 
     updateTurn(game) {
-        if (game.turn == "No one"){
+        if (game.turn == null){
             this.root.querySelector(".header__turn").textContent = "";
         }
         else {
