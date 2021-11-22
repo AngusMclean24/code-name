@@ -1,100 +1,212 @@
+class GameView {
+    constructor(root) {
+        this.root = root
+        this.onTileClick = undefined;
+        this.onRestartClick = undefined;
+
+        this.root.querySelectorAll(".board__tile").forEach(tile => {
+            tile.addEventListener("click", () => {
+                if (this.onTileClick) {
+                    this.onTileClick(tile.dataset.index);
+                }
+            });
+        });
+
+        this.root.querySelector(".header__restart").addEventListener("click", () => {
+            if (this.onRestartClick) {
+                this.onRestartClick();
+            }
+        });
+    }
+
+    update(game) {
+        this.updateTurn(game);
+        this.updateStatus(game);
+        this.updateBoard(game);
+    }
+
+    updateTurn(game) {
+        if (game.turn == "No one"){
+            this.root.querySelector(".header__turn").textContent = "";
+        }
+        else {
+            this.root.querySelector(".header__turn").textContent = `${game.turn}'s turn`;
+        }
+    }
+
+    updateStatus(game) {
+        let status = "In Progress";
+
+        if (game.status === "Red") {
+            status = "Red is the Winner!";
+
+        } else if (game.status == "Blue") {
+            status = "Blue is the Winner!";
+        } else if (game.status == "Tie") {
+            status = "It's a tie!";
+        }
+
+        this.root.querySelector(".header__status").textContent = status;
+    }
+
+    updateBoard(game) {
+        for (let i = 0; i < game.board.length; i++) {
+            const tile = this.root.querySelector(`.board__tile[data-index="${i}"]`);
+            if (game.board[i] == "Red") {
+                tile.style.background =  "crimson";
+            }
+
+            else if (game.board[i] == "Blue") {
+                tile.style.background =  "dodgerblue";
+            } else {
+                tile.style.background =  "#ffffff";
+            }
+            
+        }
+    }
+}
+
+class UserView {
+    constructor(root) {
+        this.root = root
+    }
+
+    updateUser(users) {
+        const red = document.querySelector('#red .list')
+        const blue = document.querySelector('#blue .list')
+        const spectator = document.querySelector('#spectator .list')
+        /*
+        const red = this.root.querySelector('#red .list')
+        const blue = this.root.querySelector('#blue .list')
+        const spectator = this.root.querySelector('#spectator .list')
+        //const spectator = this.root.querySelector('.spectator')
+        */
+
+        removeAllChildNodes(red)
+        removeAllChildNodes(blue)
+        removeAllChildNodes(spectator)
+
+        for (const user of users) {
+            const el = document.createElement('li');
+            el.innerHTML = user[1]
+
+            if (user[2] == "Red") {
+                red.appendChild(el)
+            } else if (user[2] == "Blue") {
+                blue.appendChild(el)
+            } else if (user[2] == null) {
+                spectator.appendChild(el)
+            }
+        }
+    }
+}
+
+class Game {
+    constructor() {
+        this.turn = null;
+        this.board = new Array(9).fill(null);
+        this.status = "0"
+    }
+
+    updateBoard(newturn, newboard, status) {
+        this.turn = newturn
+        this.board = newboard
+        this.status = status
+    }
+
+}
+
 const URL = "wss://simple-websocket-codename.glitch.me/";
 const socket = io(URL);
 
+let game = new Game();
+let gameView = new GameView(document.getElementById("app"));
+let userView = new UserView(document.getElementById("app"));
+
+const gameScreen = document.getElementById('gameScreen');
+const initialScreen = document.getElementById('initialScreen');
 const joinGameBtn = document.getElementById('joinGameButton');
-const newGameBtn = document.getElementById('newGameButton');
+const usernameInput = document.getElementById('usernameInput');
 
 joinGameBtn.addEventListener('click', submitUsername);
-newGameBtn.addEventListener('click', restartGame);
 
-//initialise board
-socket.emit('getGrid') 
-var grid = null
+
 var team = null
-var turn = null
 
-//server listening functions
-socket.on('username', joinGame);
-
-socket.on('returnGrid', (text) => {
-    grid = text
-    displayBoard()
-})
-
-socket.on('returnTeam', (text) => {
-    team = text
-})
-
-socket.on('returnTurn', (text) => {
-    turn = text
-    console.log ("recieved returnTurn " + turn)
-})
-
-socket.on('gameWinner', (text) => {
-    const header = document.querySelector('h3')
-
-    if (text == 1) {
-        header.innerText = 'Congratulations to red team you won!'
-    } else {
-        header.innerText = 'Congratulations to blue team you won!'
+// define functions
+gameView.onTileClick = function (i) {
+    console.log(i)
+    console.log(team)
+    console.log(game.turn)
+    //have to check because initiall turn = null
+    if (team!=null) {
+        if (team == game.turn){
+            if (game.board[i] == null) {
+                game.board[i] = team
+                socket.emit('clicked', i)
+                //change turn on other side check if client is in sync
+                //game.turn = game.turn === "Red" ? "Blue" : "Red";
+                game.turn = null;
+                gameView.update(game)
+            }
+        }
     }
-    
-    winScreen.style.display = "block";
+};
 
-})
+gameView.onRestartClick = function () {
+    game = new Game();
+    gameView.update(game);
+    //tell other players to update
+    socket.emit('restart')
+};
 
-//user functions
 function submitUsername () {
     socket.emit('username', usernameInput.value)
 }
 
 function joinGame (state) {
-    if (state == 1) {
+    if (state != 0) {
         initialScreen.style.display = "none";
-        gameScreen.style.display = "block"; 
-        socket.emit('getTeam') 
+        gameScreen.style.display = "flex"; 
+        //if valid get my team
+        team = state
     } 
 
     else {
         const el = document.createElement('p1')
         el.innerText = 'username already exists'
         el.style.color = 'red'
-        const screen = document.querySelector('#initialScreen')
+        const screen = document.querySelector('.menu')
         screen.appendChild(el)
     }
 }
 
-//game play functions
-function squareChange(row, column){
-    if (team != 0) {
-        if (turn == team) {
-            grid[row][column] = team
-            socket.emit('clickedGrid', row, column, team)
-            displayBoard()
-        }
-        
+    console.log(team)
+
+
+//listening from server
+socket.on('restart', () => {
+    game = new Game();
+    gameView.update(game);
+})
+
+socket.on('update', (turn, board, status) => {
+    game.updateBoard(turn, board, status);
+    gameView.update(game)
+    console.log("turn is" + turn + "board is" + board)
+})
+
+socket.on('returnUsers', (text) => {
+    userView.updateUser(text)
+    console.log(text)
+})
+
+socket.on('username', joinGame);
+
+//html function
+function removeAllChildNodes(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
     }
-}
-
-function displayBoard () {
-    for (let y=0; y<grid.length; y++){
-        for(let x=0; x<grid[y].length; x++) {
-            if (grid[y][x] == 0) { 
-                document.getElementById(y+","+x).style.backgroundColor = "rgba(95, 91, 91, 0.8)";
-            }
-            
-            else if (grid[y][x] == 1){
-                document.getElementById(y+","+x).style.backgroundColor = "rgba(192, 67, 67, 0.8)";
-            }
-
-            else {
-                document.getElementById(y+","+x).style.backgroundColor = "rgba(108, 200, 253, 0.8)";
-            }
-        }
-    } 
-}
-
-function restartGame() {
-    socket.emit('restart')
-    winScreen.style.display = "none";
+}  winScreen.style.display = "none";
 }
