@@ -34,6 +34,8 @@
 }
 
 #app {
+    max-width: 83vh;
+    max-height: 90vh;
     width: 60vw;
     height: 67vw;
     margin-left: 5vw;
@@ -51,6 +53,7 @@
     font-family: Arial, Helvetica, sans-serif;
     margin-top: 5vh;
     height: 67vw;
+    max-height: 90vh;
     background: #cccccc;
     border-radius: 1vw;
     width: 30vw;
