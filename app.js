@@ -208,5 +208,4 @@ function removeAllChildNodes(parent) {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
     }
-}  winScreen.style.display = "none";
-}
+}  
