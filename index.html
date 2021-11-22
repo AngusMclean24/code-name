@@ -3,102 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X and O</title>
+    <title>Tic tac toe</title>
+    <link rel="stylesheet" href="./main.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.socket.io/socket.io-3.0.0.js"></script>
-    <script defer src="app.js"></script>
-
-    <style>
-        .container {
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .grid-container {
-          display: inline-grid;
-          grid-template-columns: auto auto auto;
-          background-color:  rgba(255, 255, 255, 0.8);
-          padding: 10px;
-          align-items: center;
-        }
-        .grid-item {
-          background-color: rgba(95, 91, 91, 0.8);
-          border: 5px solid rgba(255, 255, 255, 1);
-          padding: 10vw;
-          text-align: center;
-          border-radius: 15px;
-        }
-
-
-        #initialScreen {
-            align-self: center;
-            width: 40vw;
-            flex-direction: column;
-            display: flex;
-            background-color:  rgb(110, 179, 182);
-            border-radius: 3vw;
-            padding: 3vw;
-            font-family: Arial, Helvetica, sans-serif;
-            color: white
-        }
-
-        .menu {
-            margin: 0 auto;
-            width: 100vw;
-            position:relative;
-        }
-    
-
-        #gameScreen {
-          display: none;
-        }
-
-        #winScreen {
-          display: none;
-        }
-
-    </style>
-
+    <script defer src="main.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div id="initialScreen">
-            <div class = "menu">
-              <h1>Noughts and Crosses</h1>
-              
-              <div class="form-group">
-                <input type="text" placeholder="Enter Username" id="usernameInput"/>
-              </div>
-              <button 
-                type="submit"
-                class="btn btn-success"
-                id="joinGameButton"
-              >Join Game</button>
+    <div id="initialScreen" class="screen">
+        <div class="menu">
+            <h1>Tic Tac Toe</h1>
+            <div class="form-group">
+              <input type="text" placeholder="Enter Username" id="usernameInput"/>
+            </div>
+            <button
+              type="submit"
+              class="btn btn-success"
+              id="joinGameButton"
+            >
+              Join Game
+            </button>
+        </div>
+    </div>
+
+    <div id="gameScreen" class="screen">
+        <div id="app">
+            <div class="header">
+                <div class="header__turn"></div>
+                <div class="header__status"></div>
+                <button type="button" class="header__restart">
+                    <i class="material-icons">refresh</i>
+                </button>
+            </div>
+            <div class= "spacer"></div>
+            <div class="board">
+                <div class="board__tile" data-index="0"></div>
+                <div class="board__tile" data-index="1"></div>
+                <div class="board__tile" data-index="2"></div>
+                <div class="board__tile" data-index="3"></div>
+                <div class="board__tile" data-index="4"></div>
+                <div class="board__tile" data-index="5"></div>
+                <div class="board__tile" data-index="6"></div>
+                <div class="board__tile" data-index="7"></div>
+                <div class="board__tile" data-index="8"></div>
             </div>
         </div>
 
-        <div id="gameScreen">
-           <div class="grid-container">
-                <div class="grid-item" id="0,0" onclick="squareChange(0,0)"></div>
-                <div class="grid-item" id="0,1"onclick="squareChange(0,1)"></div>
-                <div class="grid-item" id="0,2"onclick="squareChange(0,2)"></div>
-                <div class="grid-item" id="1,0"onclick="squareChange(1,0)"></div>
-                <div class="grid-item" id="1,1"onclick="squareChange(1,1)"></div>
-                <div class="grid-item" id="1,2"onclick="squareChange(1,2)"></div>
-                <div class="grid-item" id="2,0"onclick="squareChange(2,0)"></div>
-                <div class="grid-item" id="2,1"onclick="squareChange(2,1)"></div>
-                <div class="grid-item" id="2,2"onclick="squareChange(2,2)"></div>
-              </div>  
-        </div>
-
-        <div id="winScreen">
-            <h3></h3>
-            <button 
-                type="submit"
-                class="btn btn-success"
-                id="newGameButton"
-              >Start New Game</button>  
+        <div class="users">
+            <div class = "team" id="red">
+                <h4 >Red</h4>
+                <ul class = "list">
+                </ul>
+            </div>
+            <div class = "team" id="blue" >
+                <h4 >Blue</h4>
+                <ul class = "list"></ul>
+            </div>
+            <div class = "team" id="spectator">
+                <h4 >Spectator</h4>
+                <ul class = "list"></ul>
+            </div>
         </div>
     </div>
 </body>
+</html>
+
+
