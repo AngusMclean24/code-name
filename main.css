@@ -1,0 +1,151 @@
+* {
+    box-sizing: border-box;
+}
+.screen{
+    width: 100vw;
+    height: 100vh;
+}
+
+#initialScreen {
+    display: block;
+    height:100vh;
+    justify-content: center;
+}
+
+.menu {
+    margin: auto;
+    height: 20vh;
+    width: 30vw;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 300;
+    font-size: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: lightblue;
+    border-radius: 5vw;
+}
+
+#gameScreen {
+    display: none;
+    flex-direction: row;
+    
+}
+
+#app {
+    width: 60vw;
+    height: 67vw;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    margin-top: 5vh;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column
+    
+}
+
+.users {
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top: 5vh;
+    height: 67vw;
+    background: #cccccc;
+    border-radius: 1vw;
+    width: 30vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.team {
+    text-align: center;
+}
+h4 {
+    margin: 2px;
+}
+
+ul {
+    margin: 0;
+    background-color:  #cccccc;
+    min-height: 5vh;
+}
+
+#red{
+    background-color: crimson;
+}
+
+#blue {
+    background-color: dodgerblue;
+}
+
+#spectator {
+    background-color: gray;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    background: #222;
+    height: 5vw;
+    border-radius: 1vw;
+}
+
+.header > * {
+    color: #eeeeee;
+}
+
+.header__turn {
+    padding: 12px;
+}
+
+.header__status {
+    padding: 12px;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.header__restart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    outline: none;
+    background: none;
+    cursor: pointer;
+}
+
+.spacer {
+    height: 2vw
+}
+
+.board {
+    display: grid;
+    background: #cccccc;
+    gap: 10px;
+    padding: 20px;
+    flex-grow: 1;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    border-radius: 3vw;
+}
+
+.board__tile {
+    background: #ffffff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-family: cursive;
+    color: #222222;
+    border-radius: 3vw;
+}
+
+.board__tile:hover {
+    background: #eeeeee;
+}
+
+.board__tile--winner {
+    color: green;
+}
