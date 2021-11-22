@@ -150,8 +150,8 @@ gameView.onTileClick = function (i) {
                 game.board[i] = team
                 socket.emit('clicked', i)
                 //change turn on other side check if client is in sync
-                //game.turn = game.turn === "Red" ? "Blue" : "Red";
-                game.turn = null;
+                game.turn = game.turn === "Red" ? "Blue" : "Red";
+                //game.turn = null;
                 gameView.update(game)
             }
         }
